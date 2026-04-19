@@ -3,6 +3,8 @@ package com.sparta.paymentsystem.domain.product.service;
 import com.sparta.paymentsystem.domain.product.dto.ProductResponse;
 import com.sparta.paymentsystem.domain.product.entity.Product;
 import com.sparta.paymentsystem.domain.product.repository.ProductRepository;
+import com.sparta.paymentsystem.global.error.BusinessException;
+import com.sparta.paymentsystem.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +30,8 @@ public class ProductService {
     }
 
     public Product findProductEntity(Long id) {
-        return productRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("상품을 찾을 수 없습니다.")
-        );
+        return productRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     private ProductResponse toResponse(Product product) {
@@ -42,5 +43,4 @@ public class ProductService {
                 product.getDescription()
         );
     }
-
 }
